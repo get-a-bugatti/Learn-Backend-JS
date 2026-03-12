@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+const {Schema} = mongoose;
 
 const userSchema = new mongoose.Schema(
     {
@@ -27,7 +28,6 @@ const userSchema = new mongoose.Schema(
         },
         refreshToken: {
             type: String,
-            required: true,
         },
         watchHistory: [
             {
@@ -50,11 +50,10 @@ const userSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-userSchema.pre("save", async function (next) {
-    if (!this.isModified("password")) return next();
+userSchema.pre("save", async function () {
+    if (!this.isModified("password")) return ;
 
     this.password = await bcrypt.hash(this.password, 10);
-    next();
 });
 
 userSchema.methods.isPasswordCorrect = async function (password) {
