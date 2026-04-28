@@ -42,6 +42,7 @@ export default function Channel({
             duration={video.duration}
             views={video.views}
             thumbnail={video.thumbnail}
+            playlistDropdown={false}
           />
         ))}
       </div>

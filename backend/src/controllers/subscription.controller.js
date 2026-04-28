@@ -34,6 +34,10 @@ const toggleSubscription = asyncHandler(async (req, res, next) => {
 
   const channelId = user._id;
 
+  if (String(userId) === String(channelId)) {
+    throw new ApiError(400, "Self-subscription setting disabled.");
+  }
+
   const isSubscribed = await Subscription.exists({
     subscriber: userId,
     channel: objectId(channelId),

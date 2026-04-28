@@ -51,8 +51,8 @@ export default function AvatarDropdown({
                     <div className="flex flex-col">
                         {
                             menuItems?.map(
-                                menuItem => {
-                                    return (<button className="w-full py-2 bg-white text-black-500 rounded-lg hover:bg-gray-300 cursor-pointer">
+                                (menuItem, i) => {
+                                    return (<button key={i} className="w-full py-2 bg-white text-black-500 rounded-lg hover:bg-gray-300 cursor-pointer">
                                         {menuItem.label}
                                     </button> )
                                 }

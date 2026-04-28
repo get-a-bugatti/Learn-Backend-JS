@@ -1,5 +1,6 @@
 import {Logo, PlaylistDropdown} from "./index"
 import { useNavigate } from "react-router-dom";
+import {DeleteVideoFromPlaylist} from "./index.js"
 
 
 import {
@@ -8,15 +9,18 @@ import {
 
 export default function VideoCard({
     _id,
-    title,
-    owner,
-    views,
+    title="title missing",
+    owner={},
+    views=0,
     avatar,
     duration,
     thumbnail="/missing-thumbnail.jpg",
     createdAt=Date.now(),
     className="",
-    mode = "portrait", // ✅ NEW
+    playlistDropdown=true,
+    playlists=[],
+    mode = "portrait", // ✅ NEW,
+    playlistPage=false,
     ...props
 }) {
 
@@ -156,9 +160,20 @@ export default function VideoCard({
                     </div>
 
                     {/* 🎵 Playlist Dropdown */}
-                    <div className="shrink-0">
-                        <PlaylistDropdown videoId={_id} />
-                    </div>
+                    {
+                        playlistDropdown && 
+                        <div className="shrink-0">
+                            <PlaylistDropdown videoId={_id} playlists={playlists} />
+                            
+                            {/* Playlist Page */}
+                            {
+                                playlistPage && 
+                                <DeleteVideoFromPlaylist videoId={_id} />
+                            }
+                        </div>
+                    
+                    }
+
                 </div>
             </div>
         </div>

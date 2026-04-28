@@ -37,10 +37,10 @@ function Sidebar({
             path: "/watch-history"
         },
         {
-            label: "Playlists",
-            slug: "playlists",
+            label: "My Playlists",
+            slug: "my-playlists",
             icon: HiViewList,
-            path: "/playlists"
+            path: "/my-playlists"
         },
         {
             label: "Liked Videos",

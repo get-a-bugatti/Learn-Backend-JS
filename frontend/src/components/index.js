@@ -20,6 +20,7 @@ import SubscribeBtnForm from "./SubscribeBtnForm.jsx";
 import Channel from "./Channel.jsx";
 import PlaylistDropdown from "./PlaylistDropdown.jsx";
 import PlaylistCard from "./PlaylistCard.jsx";
+import DeleteVideoFromPlaylist from "./DeleteVideoFromPlaylist.jsx";
 
 export {
   Header,
@@ -44,4 +45,5 @@ export {
   Channel,
   PlaylistDropdown,
   PlaylistCard,
+  DeleteVideoFromPlaylist,
 };

@@ -15,6 +15,7 @@ import {
   getUserChannelSubscribersCount,
   getUserSubscribedCount,
   getUserSubscriptions,
+  getUserChannelPage,
 } from "../controllers/user.controller.js";
 
 import {
@@ -63,7 +64,8 @@ router
 
 //
 
-router.route("/c/:username").get(verifyJWT, getUserChannelDetails);
+router.route("/c/:username/details").get(getUserChannelDetails);
+router.route("/c/:username/page").get(getUserChannelPage);
 
 router
   .route("/c/:username/subscribersCount")

@@ -6,6 +6,7 @@ import { Sidebar } from './components'
 import { Link, Outlet } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { login as loginUser, logout, logout as logoutUser } from './store/authSlice'
+import { addToPlaylists, removeFromPlaylists, setPlaylists } from './store/playlistSlice'
 import axios from 'axios'
 
 function App() {
@@ -23,7 +24,20 @@ function App() {
           dispatch(logoutUser());
           return false;
         }
-      })   // add more .then()'s here to fetch and reduxStorify user-based items (posts, videos)
+      })
+      .then(response => {
+        if (!response) {
+          return false;
+        } else {
+          axios.get("/api/v1/playlists/")
+            .then(playlists => {
+              if (playlists.data.data) {
+                dispatch(setPlaylists(playlists.data.data))
+              }
+            })
+        }
+      })
+      // add more .then()'s here to fetch and reduxStorify user-based items (posts, videos)
       .catch(err => {
         dispatch(logoutUser())
         console.log(err);

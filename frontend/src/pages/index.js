@@ -8,6 +8,8 @@ import LikedVideos from "./LikedVideos";
 import Subscriptions from "./Subscriptions";
 import WatchHistory from "./WatchHistory";
 import Channel from "./Channel";
+import MyPlaylists from "./MyPlaylists";
+import PlaylistPage from "./PlaylistPage";
 
 export {
   Home,
@@ -20,4 +22,6 @@ export {
   Subscriptions,
   WatchHistory,
   Channel,
+  MyPlaylists,
+  PlaylistPage,
 };

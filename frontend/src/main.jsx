@@ -13,15 +13,15 @@ import {
   LikedVideos, 
   Subscriptions,
   WatchHistory,
-  Channel
+  Channel,
+  MyPlaylists,
+  PlaylistPage
 } from "./pages/index.js"
 
 import {CommentCard} from "./components/index.js"
 import {Protected} from './components/index.js'
 import { Provider } from 'react-redux'
 import store from "./store/store.js"
-import SubscriptionCard from './components/SubscriptionCard.jsx'
-import SubscribeBtn from './components/SubscribeBtn.jsx'
 
 
 const router = createBrowserRouter([
@@ -102,9 +102,19 @@ const router = createBrowserRouter([
         )
       },
       {
-        path: "/test-subscribe-btn",
+        path: "/my-playlists",
         element: (
-          <SubscribeBtn />
+          <Protected authentication={true}>
+            <MyPlaylists />
+          </Protected>
+        )
+      },
+      {
+        path: "/playlist/:playlistId",
+        element: (
+          <Protected authentication={true}>
+            <PlaylistPage />
+          </Protected>
         )
       },
       {

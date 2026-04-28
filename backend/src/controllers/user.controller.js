@@ -467,6 +467,122 @@ const getUserChannelDetails = asyncHandler(async (req, res, next) => {
     );
 });
 
+const getUserChannelPage = asyncHandler(async (req, res, next) => {
+  const { username } = req.params;
+
+  if (!username) {
+    throw new ApiError(400, "Missing username params. /channel/username");
+  }
+
+  const channel = await User.aggregate([
+    {
+      $match: {
+        username: username?.toLowerCase(),
+      },
+    },
+
+    // 🔥 Subscribers
+    {
+      $lookup: {
+        from: "subscriptions",
+        localField: "_id",
+        foreignField: "channel",
+        as: "subscribers",
+      },
+    },
+
+    // 🔥 Subscribed To
+    {
+      $lookup: {
+        from: "subscriptions",
+        localField: "_id",
+        foreignField: "subscriber",
+        as: "subscribedTo",
+      },
+    },
+
+    // 🔥 Videos (IMPORTANT ADDITION)
+    {
+      $lookup: {
+        from: "videos",
+        let: { channelId: "$_id" },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $eq: ["$owner", "$$channelId"],
+              },
+            },
+          },
+          {
+            $sort: { createdAt: -1 }, // latest first
+          },
+          {
+            $limit: 20, // 🔥 VERY IMPORTANT (avoid loading all videos)
+          },
+          {
+            $project: {
+              title: 1,
+              thumbnail: 1,
+              views: 1,
+              duration: 1,
+              createdAt: 1,
+              owner: 1,
+            },
+          },
+        ],
+        as: "videos",
+      },
+    },
+
+    // 🔥 Computed fields
+    {
+      $addFields: {
+        subscribersCount: {
+          $size: "$subscribers",
+        },
+        channelsSubscribedToCount: {
+          $size: "$subscribedTo",
+        },
+        isSubscribed: {
+          $cond: {
+            if: {
+              $in: [req.user?._id, "$subscribers.subscriber"],
+            },
+            then: true,
+            else: false,
+          },
+        },
+      },
+    },
+
+    // 🔥 Final response shape
+    {
+      $project: {
+        fullName: 1,
+        username: 1,
+        subscribersCount: 1,
+        channelsSubscribedToCount: 1,
+        email: 1,
+        isSubscribed: 1,
+        avatar: 1,
+        coverImage: 1,
+        videos: 1, // ✅ include videos
+      },
+    },
+  ]);
+
+  if (!channel) {
+    throw new ApiError(404, "Channel not found");
+  }
+
+  return res
+    .status(200)
+    .json(
+      new ApiResponse(200, "Fetched channel overview successfully.", channel)
+    );
+});
+
 const getUserWatchHistory = asyncHandler(async (req, res, next) => {
   const userId = req.user?._id;
 
@@ -780,4 +896,5 @@ export {
   getUserSubscribedCount,
   getUserChannelSubscribersCount,
   getUserSubscriptions,
+  getUserChannelPage,
 };

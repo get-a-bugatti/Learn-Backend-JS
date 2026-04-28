@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import { VideoCard } from "../components"
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
+import { useSelector } from "react-redux";
 
 export default function Home() {
-
+    const playlists = useSelector(state => state.playlist.playlists);
 
     // TODO:  use later.
     const [videos, setVideos] = useState([]);
@@ -57,6 +58,7 @@ export default function Home() {
                             duration={video.duration}
                             views={video.views}
                             thumbnail={video.thumbnail}
+                            playlists={playlists}
                         />
                     })
                 }
